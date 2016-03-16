@@ -16,6 +16,7 @@ var campaign = [
 			"ARC4-StrongNonAtomic",
         ]
     },
+	/*
     {
         name : "Tutorial",
         description : "Learn to fight.",
@@ -78,6 +79,7 @@ var campaign = [
             "D4-Boss"
         ]
     }
+	*/
     /*,
     {
         name : "Unsolvable Levels",

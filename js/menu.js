@@ -20,12 +20,12 @@ var returnToMainMenu = function() {
 
 	var logo = $("<img src='img/logo.png' id='logo'>");
 	var logoRight = $("<img src='img/logo.png' id='logoRight'>");
-	var heading = $("<h1 id='game'>The Deadlock Empire</h1>");
-	var subheading = $("<h2 id='subtitle'>Slay dragons, master concurrency!</h2>");
-	var introText = $("<div id='introtext'>Welcome to <b>The Deadlock Empire</b>, commander!<br><br>The skills you need are your intelligence, cunning, perseverance and the will to test yourself against the intricacies of multi-threaded programming in the divine language of C#. Each <i>challenge</i> below is a computer program of two or more threads. You take the role of the Scheduler - and a cunning one! Your objective is to exploit flaws in the programs to make them crash or otherwise malfunction.<br><br>For example, you might cause a <a href='http://en.wikipedia.org/wiki/Deadlock'>deadlock</a> to occur or you might schedule context switches in such a way that two threads enter the same <a href='http://en.wikipedia.org/wiki/Critical_section'>critical section</a> at the same time. Any action that disrupts the program this way counts as a victory for you.<br><br>You are the <b>Scheduler</b> - you only have one tool at your disposal: the ability to switch contexts at any time, as the total master of time and interruptions. Let's hope it is enough... it has to be, because the Parallel Wizard's armies are upon us and only you can lead the Sequentialist armies into victory!</div>");
+	var heading = $("<h1 id='game'>ARC Empire</h1>");
+	var subheading = $("<h2 id='subtitle'>Exploring Automatic Reference Counting</h2>");
+	var introText = $("<div id='introtext'>Welcome to <b>ARC Empire</b>, an Objective-C centric fork of The Deadlock Empire!<br><br>Try out the levels below to explore Automatic Reference Counting (ARC) and see if you can force errors. The first four levels are tutorials, while the final level provides an actual challenge.</div>");
 
-	mainArea.append(logo);
-	mainArea.append(logoRight);
+	// mainArea.append(logo);
+	// mainArea.append(logoRight);
 	mainArea.append(heading);
 	mainArea.append(subheading);
 	mainArea.append($('<div class="clearboth"></div>'));
@@ -86,8 +86,8 @@ var returnToMainMenu = function() {
 	});
 
 	var clearButtonArea = $('<div style="text-align: right; margin-top: 5em;"></div>');
-	clearButtonArea.append(feedbackButton);
-	clearButtonArea.append("&nbsp;");
+	// clearButtonArea.append(feedbackButton);
+	// clearButtonArea.append("&nbsp;");
 	clearButtonArea.append(clearButton);
 
 	mainArea.append(clearButtonArea);
