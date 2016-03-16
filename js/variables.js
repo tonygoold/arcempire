@@ -35,38 +35,53 @@ var ObjectVariable = function(name) {
     this.name = name;
     this.type = 'System.Object';
 };
-var RefCountVariable = function(name) {
+var RefCountVariable = function(name, ownership) {
 	this.name = name;
 	this.type = 'ArcObject'
 	this.value = null;
+	if (ownership) {
+		this.ownership = ownership;
+	}
+	else {
+		this.ownership = "strong";
+	}
 };
 var RefCountObject = function(name) {
 	this.name = name;
 	this.refCount = 1;
 	this.deallocating = false;
 };
-RefCountObject.nameCounts = {};
+RefCountObject.prototype.retain = function() {
+	if (!this.deallocating) {
+		this.refCount += 1;
+	}
+};
+RefCountObject.prototype.release = function() {
+	if (this.deallocating) {
+		throw new RefCountError("Attempt to release a deallocated object.");
+	}
+	this.refCount -= 1;
+	if (this.refCount == 0) {
+		this.deallocating = true;
+	}
+};
+var RefCountError = function(message) {
+	Error.call(message);
+}
+RefCountError.prototype = Object.create(Error.prototype);
 var ArcAutoreleasePool = function() {
 	this.objects = [];
-	this.add = function(object) {
-		if (object !== null) {
-			this.objects.push(object);
-		}
+};
+ArcAutoreleasePool.prototype.add = function(object) {
+	if (object !== null) {
+		this.objects.push(object);
 	}
-	this.drain = function(threadState, globalState) {
-		for (var object in objects) {
-			if (object.deallocating) {
-				win("Attempt to release a deallocated object.");
-			}
-			else {
-				object.refCount -= 1;
-				if (object.refCount == 0) {
-					object.deallocating = true;
-				}
-			}
-		}
-		this.objects = [];
-	};
+};
+ArcAutoreleasePool.prototype.drain = function(threadState, globalState) {
+	this.objects.forEach(function(object) {
+		object.release();
+	});
+	this.objects = [];
 };
 /**
  * Returns the variable value in human-readable form.

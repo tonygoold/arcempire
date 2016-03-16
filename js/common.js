@@ -28,6 +28,19 @@ var fail = function() {
 	}
 };
 
+var cloneObject = function(obj) {
+	if (obj === null || typeof obj !== 'object') {
+		return obj;
+	}
+
+	var copy = {};
+	obj.constructor.call(copy);
+	for (var key in obj) {
+		copy[key] = cloneObject(obj[key]);
+	}
+	return copy;
+};
+
 // We can leave this in the open. No disadvantage and more usable for me.
 Mousetrap.bind('shift+w', function() {
 	win("You have used the Shift+W debugging keyboard shortcut to win.");

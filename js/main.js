@@ -133,14 +133,12 @@ var saveForUndo = function() {
 		globalState: gameState.globalState,
 		objecCounts: gameState.objectCounts,
 	};
-	undoHistory.push(JSON.stringify(state));
+	undoHistory.push(cloneObject(state));
 };
 
 var undo = function() {
-	var last = JSON.parse(undoHistory.pop());
+	var last = undoHistory.pop();
 	console.log(last);
-	// TODO(prvak): This forces us to have JSON-serializable threadState
-	// and globalState. Properly (de)serialize?
 	gameState.threadState = last.threadState;
 	gameState.globalState = last.globalState;
 	gameState.objectCounts = last.objectCounts;
@@ -179,7 +177,6 @@ var startLevel = function(levelName) {
 		fail("trying to start nonexisting level ", levelName);
 		return;
 	}
-	console.log(level);
 
 	var mainArea = $('#mainarea');
 	mainArea.html("");
@@ -302,7 +299,6 @@ var startLevel = function(levelName) {
 			var span = $('<span></span>');
 
 			var indentation = "";
-			console.log(instruction);
 			for (var i = 0; i < instruction.indent; i++) {
 				indentation += "  ";
 			}

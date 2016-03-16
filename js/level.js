@@ -11,8 +11,7 @@ var Level = function(id, name, short, long, victoryText, threads, variables) {
 
 Level.prototype.createFreshGlobalState = function() {
 	if (this.variables) {
-		// HAX
-		return JSON.parse(JSON.stringify(this.variables));
+		return cloneObject(this.variables);
 	}
 	return {};
 };

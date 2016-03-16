@@ -11,7 +11,9 @@ var campaign = [
         levels : [
 			"ARC0-RetainRelease",
 			"ARC1-SimpleArc",
-			"ARC2-StrongNonAtomic"
+			"ARC2-Autoreleasing",
+			"ARC3-EscapingAutorelease",
+			"ARC4-StrongNonAtomic",
         ]
     },
     {

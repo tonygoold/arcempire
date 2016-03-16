@@ -44,7 +44,56 @@ levels["ARC1-SimpleArc"] = new Level("ARC1-SimpleArc",
 	}
 );
 
-levels["ARC2-StrongNonAtomic"] = new Level("ARC2-StrongNonAtomic",
+levels["ARC2-Autoreleasing"] = new Level("ARC2-Autoreleasing",
+	"Autorelease Pools",
+	"Find out how autorelease pools defer release of an object.",
+	"Using autorelease pools and __autoreleasing variables, the release of an " +
+	"object can be deferred beyond the lifetime of the variable.",
+	"Superb! Now you know how autorelease pools work.",
+	[
+		new Thread([
+			new ArcPrimitiveAssignment("a", new ArcAllocateExpression("NSObject")),
+			new ArcAutoreleasePoolInstruction(),
+			new ArcAssignAutoreleasingInstruction("b", new VariableExpression("a")),
+			new ArcAssignAutoreleasingInstruction("b", new NullExpression("nil")),
+			new EndArcAutoreleasePoolInstruction(),
+			new ArcAssignInstruction("a", new NullExpression("nil")),
+			new FailureInstruction()
+		])
+	],
+	{
+		"a" : new RefCountVariable("a"),
+		"b" : new RefCountVariable("b", "autoreleasing")
+	}
+);
+
+levels["ARC3-EscapingAutorelease"] = new Level("ARC3-EscapingAutorelease",
+	"Drowning in Autorelease Pools",
+	"Find a way to escape the autorelease pool",
+	"Using pointers to pointers, it's possible to defeat the safety of ARC and " +
+	"leak a released object outside of an autorelease pool.",
+	"Do you understand why this caused a problem?",
+	[
+		new Thread([
+			new ArcPrimitiveAssignment("a", new ArcAllocateExpression("NSObject")),
+			new ArcAutoreleasePoolInstruction(),
+			new ArcAssignAutoreleasingInstruction("b", new VariableExpression("a")),
+			new ArcPrimitiveAssignment("*c", new VariableExpression("b")),
+			new EndArcAutoreleasePoolInstruction(),
+			new ArcAssignInstruction("a", new NullExpression("nil")),
+			new ArcAssignInstruction("a", new VariableExpression("*c")),
+			new ArcAssignInstruction("a", new NullExpression("nil")),
+			new GameOverInstruction()
+		])
+	],
+	{
+		"a" : new RefCountVariable("a"),
+		"b" : new RefCountVariable("b", "autoreleasing"),
+		"*c" : new RefCountVariable("*c", "autoreleasing")
+	}
+);
+
+levels["ARC4-StrongNonAtomic"] = new Level("ARC4-StrongNonAtomic",
 	"Strong vs. Strong",
 	"Discover the cracks in Automatic Reference Counting",
 	"Assigning a reference counted object to a strong pointer isn't an atomic operation.<br>" +
@@ -53,8 +102,8 @@ levels["ARC2-StrongNonAtomic"] = new Level("ARC2-StrongNonAtomic",
 	[
 		new Thread([
 			new WhileInstruction(new LiteralExpression(true), "loop"),
-			new ArcAssignInstruction("a", new NullExpression("nil")),
 			new ArcPrimitiveAssignment("a", new ArcAllocateExpression("NSObject")),
+			new ArcAssignInstruction("a", new NullExpression("nil")),
 			new EndWhileInstruction("loop")
 		]),
 		new Thread([
@@ -69,10 +118,3 @@ levels["ARC2-StrongNonAtomic"] = new Level("ARC2-StrongNonAtomic",
 		"b" : new RefCountVariable("b")
 	}
 );
-
-/*
-levels["ARC3-Autoreleasing"] = new Level("ARC3-Autoreleasing",
-	"Drowning in Autorelease",
-	"Find out the hidden dangers of __autoreleasing and autorelease pools.",
-	)
-*/

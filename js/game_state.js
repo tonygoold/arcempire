@@ -48,6 +48,9 @@ GameState.prototype.resetForLevel = function(level) {
 		};
 	}
 	this.globalState = level.createFreshGlobalState();
+	for (variable in this.globalState) {
+		console.log(variable + ": " + this.globalState[variable].value);
+	}
 	this.objectCounts = {};
 };
 

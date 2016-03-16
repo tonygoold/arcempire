@@ -76,7 +76,11 @@ var updateGlobalVariables = function() {
 	for (var key in gameState.globalState) {
 		var variable = gameState.globalState[key];
 		var representation = $('<div class="variable"></div>');
-		representation.append($('<a href="https://msdn.microsoft.com/en-us/library/' + variable.type + '" class="type"></a>').text(variable.type));
+		var type = variable.type;
+		if (variable instanceof RefCountVariable && variable.ownership != "strong") {
+			type += " __" + variable.ownership;
+		}
+		representation.append($('<a href="https://msdn.microsoft.com/en-us/library/' + variable.type + '" class="type"></a>').text(type));
 		representation.append($('<span class="name"></span>').text(variable.name));
 		if (variable.value == "unimportant") {
 
